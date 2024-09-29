@@ -1,0 +1,13 @@
+.venv
+.vscode
+
+__pycache__
+*ado.xlsx
+
+build
+dist
+*.spec
+*.zip
+
+trial*.py
+masroby*
