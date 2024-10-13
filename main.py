@@ -3,7 +3,6 @@ import ctypes
 import locale
 import tkinter
 from tkinter import ttk
-from datetime import datetime
 from tkinter import filedialog
 from PIL import Image, ImageTk
 import matplotlib.pyplot as plt
@@ -11,29 +10,21 @@ from tkinter import filedialog, messagebox
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 from helper import process_data
+from constant import *
 
-
-ctypes.windll.shcore.SetProcessDpiAwareness(1)
+ctypes.windll.shcore.SetProcessDpiAwareness(2)
 locale.setlocale(locale.LC_TIME, 'id_ID.UTF-8')
 
 app = tkinter.Tk()
 app.title('Measurement App')
 
-w = 1600
-h = 850
+dpi = app.winfo_fpixels('1i')
+
+w = int(1280 * (dpi / 96))
+h = int(700 * (dpi / 96))
 x = int((app.winfo_screenwidth() / 2) - (w / 2))
 y = int((app.winfo_screenheight() / 2) - (h / 2))
 app.geometry(f'{w}x{h}+{x}+{y}')
-
-graph1_x = 400
-graph1_y = 10
-graph1_w = 570
-graph1_h = 570
-
-graph2_x = 1000
-graph2_y = 10
-graph2_w = 570
-graph2_h = 570
 
 def update_time():
     current_time = time.strftime('%H:%M:%S')
@@ -50,9 +41,8 @@ def load_logo():
     label_logo.place(x=10, y=10)
 
 def on_closing():
-    if messagebox.askokcancel('Quit', 'Apakah Anda ingin menutup aplikasi?'):
-        app.quit()
-        app.destroy()
+    app.quit()
+    app.destroy()
 
 def load_data():
     global file_path
@@ -82,18 +72,8 @@ def create_table(frame, x, y, width, height):
     table.heading('col4', text='Elevasi')
     table.heading('col5', text='Elevasi Filter')
 
-    data = [
-        ['', '', '','',''],
-        ['', '', '','',''],
-        ['', '', '','',''],
-        ['', '', '','',''],
-        ['', '', '','',''],
-        ['', '', '','',''],
-        ['', '', '','',''],
-        ['', '', '','',''],
-        ['', '', '','',''],
-        ['', '', '','',''],
-    ]
+    data = [['' for _ in range(5)] for _ in range(9)]
+
     for row in data:
         table.insert('', tkinter.END, values=row)
 
@@ -157,32 +137,15 @@ def create_constant_table(frame, x, y, width, height):
     columns = ('Konstanta', 'S0', 'M2', 'S2', 'N2', 'K1', 'Q1', 'M4', 'MS4', 'K2', 'P1')
     table = ttk.Treeview(frame, columns=columns, show='headings')
 
-    table.heading('Konstanta', text='Konstanta')
-    table.heading('S0', text='S0')
-    table.heading('M2', text='M2')
-    table.heading('S2', text='S2')
-    table.heading('N2', text='N2')
-    table.heading('K1', text='K1')
-    table.heading('Q1', text='Q1')
-    table.heading('M4', text='M4')
-    table.heading('MS4', text='MS4')
-    table.heading('K2', text='K2')
-    table.heading('P1', text='P1')
+    for i, column in enumerate(columns):
+        if i == 0:
+            column_width = 80
+        else:
+            column_width = 100
 
-    column_width = 80
-    table.column('Konstanta', width=100)
-    table.column('S0', width=column_width)
-    table.column('M2', width=column_width)
-    table.column('S2', width=column_width)
-    table.column('N2', width=column_width)
-    table.column('K1', width=column_width)
-    table.column('Q1', width=column_width)
-    table.column('M4', width=column_width)
-    table.column('MS4', width=column_width)
-    table.column('K2', width=column_width)
-    table.column('P1', width=column_width)
+        table.heading(column, text=column)
+        table.column(column, width=column_width)
 
-    # Initial data for the table
     data = [
         ['A cm', '', '', '', '', '', '', '', '', '', ''],
         ['g360', '', '', '', '', '', '', '', '', '', '']
@@ -223,45 +186,38 @@ bot_frame.place(x=0, y=top_frame_height+mid_frame_height)
 result_frame = tkinter.LabelFrame(mid_frame, text='Hasil', height=300, width=380)
 result_frame.place(x=10, y=370)
 
-for i, text in enumerate(['Tinggi Air Max', 'Tinggi Air Min', 'Tunggang Pasut', 'Formzahl', 'Tipe Pasut']):
+entry_height_max = tkinter.Entry(result_frame, width=WIDTH_ENTRY_RESULT)
+entry_height_min = tkinter.Entry(result_frame, width=WIDTH_ENTRY_RESULT)
+entry_height_diff = tkinter.Entry(result_frame, width=WIDTH_ENTRY_RESULT)
+entry_formzahl = tkinter.Entry(result_frame, width=WIDTH_ENTRY_RESULT)
+entry_type = tkinter.Entry(result_frame, width=WIDTH_ENTRY_RESULT)
+
+entries = [entry_height_max, entry_height_min, entry_height_diff, entry_formzahl, entry_type]
+entries_label = ['Tinggi Air Max', 'Tinggi Air Min', 'Tunggang Pasut', 'Formzahl', 'Tipe Pasut']
+
+for i, text in enumerate(entries_label):
     tkinter.Label(result_frame, text=text).place(x=10, y=10+40*i)
+    entries[i].place(x=140, y=10+40*i)
 
-entry_height_max = tkinter.Entry(result_frame, width=25)
-entry_height_max.place(x=140, y=10)
-entry_height_min = tkinter.Entry(result_frame, width=25)
-entry_height_min.place(x=140, y=50)
-entry_height_diff = tkinter.Entry(result_frame, width=25)
-entry_height_diff.place(x=140, y=90)
-entry_formzahl = tkinter.Entry(result_frame, width=25)
-entry_formzahl.place(x=140, y=130)
-entry_type = tkinter.Entry(result_frame, width=25)
-entry_type.place(x=140, y=170)
-
-entry_path = tkinter.Entry(mid_frame, width=45)
+entry_path = tkinter.Entry(mid_frame, width=WIDTH_ENTRY_PATH)
 entry_path.place(x=10, y=290)
 
 label_time = tkinter.Label(top_frame, text="", fg='white', bg='#292F36', font=('Helvetica', 16))
 label_time.place(x=w-140, y=30)
 
-button_load = tkinter.Button(mid_frame, text='Load Excel', command=load_data)
-button_load.place(x=10, y=320)
-
-button_execute = tkinter.Button(mid_frame, text='Jalankan', command=lambda: execute(file_path))
-button_execute.place(x=100, y=320)
-
-button_execute = tkinter.Button(mid_frame, text='Simpan Hasil')
-button_execute.place(x=170, y=320)
-
-table = create_table(mid_frame, 10, 10, 380, 230)
-
-constant_table = create_constant_table(mid_frame, 400, 590, 1050, 100)
-create_empty_plot(mid_frame, graph1_x, graph1_y, graph1_w, graph1_h)
-create_empty_plot(mid_frame, graph2_x, graph2_y, graph2_w, graph2_h)
+tkinter.Button(mid_frame, text='Load Excel', command=load_data).place(x=10, y=320)
+tkinter.Button(mid_frame, text='Jalankan', command=lambda: execute(file_path)).place(x=100, y=320)
+tkinter.Button(mid_frame, text='Simpan Hasil').place(x=170, y=320)
 
 tkinter.Label(bot_frame, text='Copyright @', bg='#E0D8D8').place(x=w-110, y=20)
 
+table = create_table(mid_frame, 10, 10, 380, 230)
+constant_table = create_constant_table(mid_frame, 400, 590, 1050, 100)
 
+create_empty_plot(mid_frame, graph1_x, graph1_y, graph1_w, graph1_h)
+create_empty_plot(mid_frame, graph2_x, graph2_y, graph2_w, graph2_h)
 load_logo()
 update_time()
+
 app.protocol('WM_DELETE_WINDOW', on_closing)
 app.mainloop()
