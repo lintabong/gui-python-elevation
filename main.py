@@ -1,12 +1,10 @@
 import time
 import ctypes
 import locale
-import tkinter
-from tkinter import ttk
-from tkinter import filedialog
+import tkinter as tk
+from tkinter import ttk, filedialog, messagebox
 from PIL import Image, ImageTk
 import matplotlib.pyplot as plt
-from tkinter import filedialog, messagebox
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 from helper import process_data
@@ -15,209 +13,158 @@ from constant import *
 ctypes.windll.shcore.SetProcessDpiAwareness(2)
 locale.setlocale(locale.LC_TIME, 'id_ID.UTF-8')
 
-app = tkinter.Tk()
-app.title('Measurement App')
+class MeasurementApp(tk.Tk):
+    def __init__(self):
+        super().__init__()
+        self.title('Measurement App')
 
-dpi = app.winfo_fpixels('1i')
+        self.dpi = self.winfo_fpixels('1i')
 
-w = int(1280 * (dpi / 96))
-h = int(700 * (dpi / 96))
-x = int((app.winfo_screenwidth() / 2) - (w / 2))
-y = int((app.winfo_screenheight() / 2) - (h / 2))
-app.geometry(f'{w}x{h}+{x}+{y}')
+        self.width = int(1280 * (self.dpi / 96))
+        self.height = int(700 * (self.dpi / 96))
+        x_pos = int((self.winfo_screenwidth() / 2) - (self.width / 2))
+        y_pos = int((self.winfo_screenheight() / 2) - (self.height / 2))
+        self.geometry(f'{self.width}x{self.height}+{x_pos}+{y_pos}')
 
-def update_time():
-    current_time = time.strftime('%H:%M:%S')
-    label_time.config(text=current_time)
-    label_time.after(1000, update_time)
+        self.top_frame()
+        self.mid_frame()
+        self.bot_frame()
+        
+        self.protocol('WM_DELETE_WINDOW', self.on_closing)
 
-def load_logo():
-    image = Image.open('logo.png')
-    image = image.resize((90, 60))
-    logo = ImageTk.PhotoImage(image)
+    def top_frame(self):
+        top_frame = tk.Frame(self, background='#292F36', height=int(0.1 * self.height), width=self.width)
+        top_frame.place(x=0, y=0)
+
+        image = Image.open('logo.png')
+        image = image.resize((90, 60))
+        logo = ImageTk.PhotoImage(image)
+        label_logo = tk.Label(top_frame, image=logo, bg='#292F36')
+        label_logo.image = logo
+        label_logo.place(x=10, y=10)
+
+        label_time = tk.Label(top_frame, text="", fg='white', bg='#292F36', font=('Helvetica', 16))
+        label_time.place(x=1280-140, y=30)
+
+        def update_time():
+            current_time = time.strftime('%H:%M:%S')
+            label_time.config(text=current_time)
+            label_time.after(1000, update_time)
+
+        update_time()
+
+    def mid_frame(self):
+        global file_path, formzahl, result, highest, lowest, difference, section1, H, g_360
+
+        entries_label = ['Tinggi Air Max', 'Tinggi Air Min', 'Tunggang Pasut', 'Formzahl', 'Tipe Pasut']
+        entries = {}
+
+        def load_data():
+            global file_path
+            file_path = filedialog.askopenfilename(filetypes=[('Excel files', '*.xlsx')])
+            entry_path.delete(0, tk.END)
+            entry_path.insert(0, file_path)
+
+        def execute():
+            global file_path, formzahl, result, highest, lowest, difference, section1, H, g_360
+
+            if file_path:
+                formzahl, result, highest, lowest, difference, section1, H, g_360 = process_data.run(file_path=file_path)
+
+                result_process = [highest, lowest, difference, formzahl, result]
+
+                for i, text in enumerate(entries_label):
+                    entries[text].delete(0, tk.END)
+                    entries[text].insert(0, result_process[i])
+
+                create_plot(mid_frame, 430, 10, 550, 550, section1)
+
+                new_data = [['A cm'],['g360']]
     
-    label_logo = tkinter.Label(top_frame, image=logo, bg='#292F36')
-    label_logo.image = logo
-    label_logo.place(x=10, y=10)
+                for i in range(len(H)):
+                    new_data[0].append(round(H[i], 3))
+                    new_data[1].append(round(g_360[i], 3))
 
-def on_closing():
-    app.quit()
-    app.destroy()
+                new_data[0].append(round(H[2]*0.27, 3))
+                new_data[0].append(round(H[4]*0.33, 3))
+                new_data[1].append(round(g_360[2], 3))
+                new_data[1].append(round(g_360[4], 3))
 
-def load_data():
-    global file_path
-    file_path = filedialog.askopenfilename(filetypes=[('Excel files', '*.xlsx')])
-    entry_path.delete(0, tkinter.END)
-    entry_path.insert(0, file_path) 
+                for row in table.get_children():
+                    table.delete(row)
 
-def create_empty_plot(frame, x, y, width, height):
-    fig, ax = plt.subplots(figsize=(3, 2))
-    ax.plot([], [])
-    ax.set_xlim(0, 10)
-    ax.set_ylim(0, 10)
-    ax.set_xlabel("X-axis")
-    ax.set_ylabel("Y-axis")
+                for row in new_data:
+                    table.insert('', tk.END, values=row)
 
-    canvas = FigureCanvasTkAgg(fig, master=frame)
-    canvas.draw()
-    canvas.get_tk_widget().place(x=x, y=y, width=width, height=height)
+        def save_result():
+            global file_path, formzahl, result, highest, lowest, difference, section1, H, g_360
+            print(formzahl, result, highest, lowest, difference)
+            print(H)
+            print(g_360)
 
-def create_table(frame, x, y, width, height):
-    columns = ('col1', 'col2', 'col3', 'col4', 'col5')
-    table = ttk.Treeview(frame, columns=columns, show='headings')
+        def create_plot(frame, x, y, width, height, data_y = [[]]):           
+            fig, ax = plt.subplots(figsize=(4, 3))
+            for i, row in enumerate(data_y):
+                ax.plot(row)
 
-    table.heading('col1', text='No')
-    table.heading('col2', text='Tanggal')
-    table.heading('col3', text='Jam')
-    table.heading('col4', text='Elevasi')
-    table.heading('col5', text='Elevasi Filter')
+            if len(data_y) <= 0:
+                ax.set_xlim(0, 10)
+                ax.set_ylim(0, 10)
 
-    data = [['' for _ in range(5)] for _ in range(9)]
+            ax.set_xlabel('Index')
+            ax.set_ylabel('Value')
+            ax.set_title('2D Plot')
+            ax.legend(loc='best', fontsize='small')
 
-    for row in data:
-        table.insert('', tkinter.END, values=row)
+            canvas = FigureCanvasTkAgg(fig, master=frame)
+            canvas.draw()
+            canvas.get_tk_widget().place(x=x, y=y, width=width, height=height)
 
-    scrollbar = ttk.Scrollbar(frame, orient=tkinter.VERTICAL, command=table.yview)
-    table.configure(yscroll=scrollbar.set)
+        mid_frame = tk.Frame(self, background='#FAF5F1', height=int(0.83 * self.height), width=self.width)
+        mid_frame.place(x=0, y=int(0.1 * self.height))
 
-    table.place(x=x, y=y, width=width - 20, height=height)
-    scrollbar.place(x=x+width-20, y=y, height=height)
+        entry_path = tk.Entry(mid_frame, width=45)
+        entry_path.place(x=10, y=10)
 
-    return table
+        tk.Button(mid_frame, text='Load Excel', command=load_data).place(x=10, y=60)
+        tk.Button(mid_frame, text='Jalankan', command=execute).place(x=100, y=60)
+        tk.Button(mid_frame, text='Simpan Hasil', command=save_result).place(x=170, y=60)
 
-def execute(file_path):
-    formzahl, result, highest, lowest, difference, section1, H, g_360 = process_data.run(file_path=file_path)
+        columns = ('Konstanta', 'S0', 'M2', 'S2', 'N2', 'K1', 'Q1', 'M4', 'MS4', 'K2', 'P1')
+        table = ttk.Treeview(mid_frame, columns=columns, show='headings')
 
-    new_data = [['A cm'],['g360']]
-    
-    for i in range(len(H)):
-        new_data[0].append(round(H[i], 3))
-        new_data[1].append(round(g_360[i], 3))
+        result_frame = tk.LabelFrame(mid_frame, text='Hasil', height=300, width=380)
+        result_frame.place(x=10, y=120)
 
-    new_data[0].append(round(H[2]*0.27, 3))
-    new_data[0].append(round(H[4]*0.33, 3))
-    new_data[1].append(round(g_360[2], 3))
-    new_data[1].append(round(g_360[4], 3))
+        for i, text in enumerate(entries_label):
+            tk.Label(result_frame, text=text).place(x=10, y=10+40*i)
+            entry = tk.Entry(result_frame, width=20)
+            entry.place(x=140, y=10+40*i)
+            entries[text] = entry
 
-    update_constant_table(constant_table, new_data)
-    entry_height_max.delete(0, tkinter.END)
-    entry_height_max.insert(0, highest) 
+        x = 440
+        y = 580
+        table_width = 1100
+        for col in columns:
+            table.heading(col, text=col)
+            table.column(col, width=10)
 
-    entry_height_min.delete(0, tkinter.END)
-    entry_height_min.insert(0, lowest) 
+        table.place(x=x, y=y, width=table_width-20, height=130)
+        scrollbar = ttk.Scrollbar(mid_frame, orient=tk.VERTICAL, command=table.yview)
+        table.configure(yscroll=scrollbar.set)
+        scrollbar.place(x=x+table_width-20, y=y, height=230)
 
-    entry_height_diff.delete(0, tkinter.END)
-    entry_height_diff.insert(0, difference) 
+        create_plot(mid_frame, 430, 10, 550, 550)
+        create_plot(mid_frame, 1010, 10, 550, 550)
 
-    entry_formzahl.delete(0, tkinter.END)
-    entry_formzahl.insert(0, formzahl) 
+    def bot_frame(self):
+        bot_frame = tk.Frame(self, background='#E0D8D8', height=int(0.07 * self.height), width=self.width)
+        bot_frame.place(x=0, y=int(0.93 * self.height))
 
-    entry_type.delete(0, tkinter.END)
-    entry_type.insert(0, result) 
-    
+    def on_closing(self):
+        self.quit()
+        self.destroy()
 
-    for row in table.get_children():
-        table.delete(row)
-
-    fig, ax = plt.subplots(figsize=(4, 3))
-    for i, row in enumerate(section1):
-        ax.plot(row, label=f'Line {i+1}')
-
-    ax.set_xlabel('Index')
-    ax.set_ylabel('Value')
-    ax.set_title('2D Plot')
-    ax.legend(loc='best', fontsize='small')
-
-    canvas = FigureCanvasTkAgg(fig, master=mid_frame)
-    canvas.draw()
-    canvas.get_tk_widget().place(x=graph1_x, y=graph1_y, width=graph1_w, height=graph1_h) 
-
-
-def create_constant_table(frame, x, y, width, height):
-    columns = ('Konstanta', 'S0', 'M2', 'S2', 'N2', 'K1', 'Q1', 'M4', 'MS4', 'K2', 'P1')
-    table = ttk.Treeview(frame, columns=columns, show='headings')
-
-    for i, column in enumerate(columns):
-        if i == 0:
-            column_width = 80
-        else:
-            column_width = 100
-
-        table.heading(column, text=column)
-        table.column(column, width=column_width)
-
-    data = [
-        ['A cm', '', '', '', '', '', '', '', '', '', ''],
-        ['g360', '', '', '', '', '', '', '', '', '', '']
-    ]
-    
-    for row in data:
-        table.insert('', tkinter.END, values=row)
-
-    scrollbar = ttk.Scrollbar(frame, orient=tkinter.VERTICAL, command=table.yview)
-    table.configure(yscroll=scrollbar.set)
-
-    table.place(x=x, y=y, width=width - 20, height=height)
-    scrollbar.place(x=x+width-20, y=y, height=height)
-
-    return table
-
-def update_constant_table(table, new_data):
-    for row in table.get_children():
-        table.delete(row)
-
-    for row in new_data:
-        table.insert('', tkinter.END, values=row)
-
-file_path = None
-
-top_frame_height = int(0.1 * h)
-top_frame = tkinter.Frame(app, background='#292F36', height=top_frame_height, width=w)
-top_frame.place(x=0, y=0)
-
-mid_frame_height = int(0.83 * h)
-mid_frame = tkinter.Frame(app, background='#FAF5F1', height=mid_frame_height, width=w)
-mid_frame.place(x=0, y=top_frame_height)
-
-bot_frame_height = int(0.07 * h)
-bot_frame = tkinter.Frame(app, background='#E0D8D8', height=bot_frame_height, width=w)
-bot_frame.place(x=0, y=top_frame_height+mid_frame_height)
-
-result_frame = tkinter.LabelFrame(mid_frame, text='Hasil', height=300, width=380)
-result_frame.place(x=10, y=370)
-
-entry_height_max = tkinter.Entry(result_frame, width=WIDTH_ENTRY_RESULT)
-entry_height_min = tkinter.Entry(result_frame, width=WIDTH_ENTRY_RESULT)
-entry_height_diff = tkinter.Entry(result_frame, width=WIDTH_ENTRY_RESULT)
-entry_formzahl = tkinter.Entry(result_frame, width=WIDTH_ENTRY_RESULT)
-entry_type = tkinter.Entry(result_frame, width=WIDTH_ENTRY_RESULT)
-
-entries = [entry_height_max, entry_height_min, entry_height_diff, entry_formzahl, entry_type]
-entries_label = ['Tinggi Air Max', 'Tinggi Air Min', 'Tunggang Pasut', 'Formzahl', 'Tipe Pasut']
-
-for i, text in enumerate(entries_label):
-    tkinter.Label(result_frame, text=text).place(x=10, y=10+40*i)
-    entries[i].place(x=140, y=10+40*i)
-
-entry_path = tkinter.Entry(mid_frame, width=WIDTH_ENTRY_PATH)
-entry_path.place(x=10, y=290)
-
-label_time = tkinter.Label(top_frame, text="", fg='white', bg='#292F36', font=('Helvetica', 16))
-label_time.place(x=w-140, y=30)
-
-tkinter.Button(mid_frame, text='Load Excel', command=load_data).place(x=10, y=320)
-tkinter.Button(mid_frame, text='Jalankan', command=lambda: execute(file_path)).place(x=100, y=320)
-tkinter.Button(mid_frame, text='Simpan Hasil').place(x=170, y=320)
-
-tkinter.Label(bot_frame, text='Copyright @', bg='#E0D8D8').place(x=w-110, y=20)
-
-table = create_table(mid_frame, 10, 10, 380, 230)
-constant_table = create_constant_table(mid_frame, 400, 590, 1050, 100)
-
-create_empty_plot(mid_frame, graph1_x, graph1_y, graph1_w, graph1_h)
-create_empty_plot(mid_frame, graph2_x, graph2_y, graph2_w, graph2_h)
-load_logo()
-update_time()
-
-app.protocol('WM_DELETE_WINDOW', on_closing)
-app.mainloop()
+if __name__ == "__main__":
+    app = MeasurementApp()
+    app.mainloop()
