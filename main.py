@@ -8,7 +8,6 @@ import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 from helper import process_data, export_excel
-from constant import *
 
 ctypes.windll.shcore.SetProcessDpiAwareness(2)
 locale.setlocale(locale.LC_TIME, 'id_ID.UTF-8')

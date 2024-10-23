@@ -11,3 +11,6 @@ dist
 
 trial*.py
 masroby*
+
+*.xlsx
+solarcell_*
