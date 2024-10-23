@@ -2,12 +2,12 @@ import time
 import ctypes
 import locale
 import tkinter as tk
-from tkinter import ttk, filedialog, messagebox
+from tkinter import ttk, filedialog, messagebox, StringVar
 from PIL import Image, ImageTk
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
-from helper import process_data
+from helper import process_data, export_excel
 from constant import *
 
 ctypes.windll.shcore.SetProcessDpiAwareness(2)
@@ -44,7 +44,7 @@ class MeasurementApp(tk.Tk):
         label_logo.place(x=10, y=10)
 
         label_time = tk.Label(top_frame, text="", fg='white', bg='#292F36', font=('Helvetica', 16))
-        label_time.place(x=1280-140, y=30)
+        label_time.place(x=self.width-140, y=30)
 
         def update_time():
             current_time = time.strftime('%H:%M:%S')
@@ -77,7 +77,8 @@ class MeasurementApp(tk.Tk):
                     entries[text].delete(0, tk.END)
                     entries[text].insert(0, result_process[i])
 
-                create_plot(mid_frame, 430, 10, 550, 550, section1)
+                create_plot(mid_frame, 430, 10, 550, 550, section1, f'Plot {str(len(section1))} hari')
+                create_plot(mid_frame, 1010, 10, 550, 550, [section1[len(section1)//2]], 'Plot tengah')
 
                 new_data = [['A cm'],['g360']]
     
@@ -85,24 +86,29 @@ class MeasurementApp(tk.Tk):
                     new_data[0].append(round(H[i], 3))
                     new_data[1].append(round(g_360[i], 3))
 
-                new_data[0].append(round(H[2]*0.27, 3))
-                new_data[0].append(round(H[4]*0.33, 3))
-                new_data[1].append(round(g_360[2], 3))
-                new_data[1].append(round(g_360[4], 3))
-
                 for row in table.get_children():
                     table.delete(row)
 
                 for row in new_data:
                     table.insert('', tk.END, values=row)
 
+                if section1:
+                    dropdown_var.set('')
+                    dropdown_picker['values'] = list(range(1, len(section1) + 1))
+
         def save_result():
             global file_path, formzahl, result, highest, lowest, difference, section1, H, g_360
-            print(formzahl, result, highest, lowest, difference)
-            print(H)
-            print(g_360)
 
-        def create_plot(frame, x, y, width, height, data_y = [[]]):           
+            wb = export_excel.run(formzahl, result, highest, lowest, difference, section1, H, g_360)
+            
+            save_path = filedialog.asksaveasfilename(defaultextension='.xlsx', filetypes=[('Excel files', '*.xlsx')])
+            if save_path:
+                wb.save(save_path)
+                messagebox.showinfo('Success', f'Data berhasil disimpan ke {save_path}')
+            else:
+                messagebox.showwarning('Cancelled', 'Penyimpanan dibatalkan')
+
+        def create_plot(frame, x, y, width, height, data_y = [[]], title=None):           
             fig, ax = plt.subplots(figsize=(4, 3))
             for i, row in enumerate(data_y):
                 ax.plot(row)
@@ -113,7 +119,7 @@ class MeasurementApp(tk.Tk):
 
             ax.set_xlabel('Index')
             ax.set_ylabel('Value')
-            ax.set_title('2D Plot')
+            ax.set_title('2D Plot') if not title else ax.set_title(title)
             ax.legend(loc='best', fontsize='small')
 
             canvas = FigureCanvasTkAgg(fig, master=frame)
@@ -134,7 +140,7 @@ class MeasurementApp(tk.Tk):
         table = ttk.Treeview(mid_frame, columns=columns, show='headings')
 
         result_frame = tk.LabelFrame(mid_frame, text='Hasil', height=300, width=380)
-        result_frame.place(x=10, y=120)
+        result_frame.place(x=10, y=240)
 
         for i, text in enumerate(entries_label):
             tk.Label(result_frame, text=text).place(x=10, y=10+40*i)
@@ -153,6 +159,19 @@ class MeasurementApp(tk.Tk):
         scrollbar = ttk.Scrollbar(mid_frame, orient=tk.VERTICAL, command=table.yview)
         table.configure(yscroll=scrollbar.set)
         scrollbar.place(x=x+table_width-20, y=y, height=230)
+        
+        controll_frame = tk.LabelFrame(mid_frame, text='Plot Hari tertentu', height=100, width=380)
+        controll_frame.place(x=10, y=120)
+
+        dropdown_var = StringVar()
+        dropdown_picker = ttk.Combobox(controll_frame, textvariable=dropdown_var, state="readonly")
+        dropdown_picker.place(x=40, y=10)
+
+        def on_dropdown_change(event):
+            selected_day = int(dropdown_var.get()) - 1
+            create_plot(mid_frame, 1010, 10, 550, 550, [section1[selected_day]], f'Plot hari ke-{selected_day + 1}')
+
+        dropdown_picker.bind("<<ComboboxSelected>>", on_dropdown_change)
 
         create_plot(mid_frame, 430, 10, 550, 550)
         create_plot(mid_frame, 1010, 10, 550, 550)

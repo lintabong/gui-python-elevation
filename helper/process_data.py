@@ -329,4 +329,9 @@ def run(file_path):
     lowest = min(min(row) for row in section1)
     difference = abs(highest - lowest)
 
+    H.append(round(H[2]*0.27, 3))
+    H.append(round(H[4]*0.33, 3))
+    g_360.append(round(g_360[2], 3))
+    g_360.append(round(g_360[4], 3))
+
     return formzahl, result, highest, lowest, difference, section1, H, g_360
