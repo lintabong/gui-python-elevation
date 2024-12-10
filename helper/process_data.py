@@ -1,11 +1,22 @@
 import math
 import pandas
+import locale
 from datetime import datetime
+
+locale.setlocale(locale.LC_TIME, 'id_ID.UTF-8')
 
 
 def run(file_path):
     df = pandas.read_excel(file_path)
     df_clean = (df.iloc[10:41, 1:26]).dropna(how='all')
+
+    detail = (df.iloc[3:7, 2:3])
+    detail = detail.values.flatten()
+
+    # Menghapus elemen 'Unnamed: 2' dan mengubah menjadi list
+    detail = [x for x in detail]
+
+    year = detail[2].split(' ')[2]
 
     # section1
     section1 = df_clean.values.tolist()
@@ -218,6 +229,70 @@ def run(file_path):
     # for row in section6:
     #     print([round(r, 3) for r in row])
     # section 7
+
+    kabisat_constant = [
+        [1, 31, 31, 15, 9, 2009],
+        [2, 59, 60, False, False],
+        [3, 90, 91, 257, 258],
+        [4, 120, 121, 257, 258, 257],
+        [5, 151, 152],
+        [6, 181, 182, 257],
+        [7, 212, 213, 257, 257],
+        [8, 243, 244, 257],
+        [9, 273, 274, 257],
+        [10, 304, 305],
+        [11, 334, 335],
+        [12, 365, 366]
+    ]
+
+    dth  = [257, 2009, 27, 27]
+
+    const_s = 277.025+(129.38481*(dth[1]-1900))+(13.1764*(dth[0]+dth[-1]))
+    const_h = 280.19-(0.23872*(dth[1]-1900))+(0.98565*(dth[0]+dth[-1]))
+    const_p = 334.385+(40.66249*(dth[1]-1900))+(0.1114*(dth[0]+dth[-1]))
+    const_n = 259.157-(19.32818*(dth[1]-1900))-(0.05295*(dth[0]+dth[-1]))
+
+    const_V = []
+    const_u = []
+    const_Vreal = []
+    const_f = []
+    const_V.append(-2*const_s+2*const_h)
+    const_V.append(0)
+    const_V.append(-3*const_s+2*const_h+const_p)
+    const_V.append(2*const_h)
+    const_V.append(const_h+90)
+    const_V.append(-2*const_s+const_h+270)
+    const_V.append(270-const_h)
+    const_V.append(2*const_V[0])
+    const_V.append(const_V[0])
+
+    R42 = const_n
+    const_u.append(-2.14 * math.sin(R42 * math.pi / 180))
+    const_u.append(0)
+    const_u.append(const_u[0])
+    const_u.append((-17.74 * math.sin(R42 * math.pi / 180)) + (0.68 * math.sin(2 * R42 * math.pi / 180)) - (0.04 * math.sin(3 * R42 * math.pi / 180)))
+    const_u.append((-8.86 * math.sin(R42 * math.pi / 180)) + (0.68 * math.sin(2 * R42 * math.pi / 180)) - (0.07 * math.sin(3 * R42 * math.pi / 180)))
+    const_u.append((10.8 * math.sin(R42 * math.pi / 180)) - (1.34 * math.sin(2 * R42 * math.pi / 180)) + (0.19 * math.sin(3 * R42 * math.pi / 180)))
+    const_u.append(0)
+    const_u.append(2*const_u[0])
+    const_u.append(const_u[0])
+
+    const_Vreal = [N48 - (math.floor(N48 / 360) * 360) for N48 in const_V]
+
+    const_f.append(1.0004 - (0.0373 * math.cos(R42 * math.pi / 180)) + (0.0002 * math.cos(2 * R42 * math.pi / 180)))
+    const_f.append(1)
+    const_f.append(const_f[0])
+    const_f.append(1.0241 + (0.2863 * math.cos(R42 * math.pi / 180)) + (0.0083 * math.cos(2 * R42 * math.pi / 180)) - (0.0015 * math.cos(3 * R42 * math.pi / 180)))
+    const_f.append(1.006 + (0.115 * math.cos(R42 * math.pi / 180)) - (0.0088 * math.cos(2 * R42 * math.pi / 180)) + (0.0006 * math.cos(3 * R42 * math.pi / 180)))
+    const_f.append(1.0089 + (0.1871 * math.cos(R42 * math.pi / 180)) - (0.0147 * math.cos(2 * R42 * math.pi / 180)) + (0.0014 * math.cos(3 * R42 * math.pi / 180)))
+    const_f.append(1)
+    const_f.append(const_f[0]*const_f[0])
+    const_f.append(const_f[0])
+
+    print(const_V)
+    print(const_u)
+    print(const_Vreal)
+    print(const_f)
 
     sum_PR = [
         [0, 0, 0, 0, 0, 0, 0, 0],
