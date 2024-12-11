@@ -44,16 +44,14 @@ def run(file_path):
         section2.append([x1_positive, x1_negative, y1_positive, y1_negative, x2_positive, 
                         x2_negative, y2_positive, y2_negative, x3_positive, x3_negative,
                         y3_positive, y3_negative])
-        
-    ADMIRALTY = 29
 
-    A10 = 29
-    A22 = 29
-    A27 = 29
-    A32 = 29
-    A37 = 29
-    A15 = 29
-    A35 = 29
+    A10 = len(section2)
+    A22 = len(section2)
+    A27 = len(section2)
+    A32 = len(section2)
+    A37 = len(section2)
+    A15 = len(section2)
+    A35 = len(section2)
 
     # section3
     cx_1 = 2000
@@ -76,171 +74,6 @@ def run(file_path):
         for row in section2
     ]
 
-    # section 4
-    suffix_0_X = 0
-    suffix_10_X = 0
-    suffix_10_Y = 0
-    suffix_12_X = 0
-    suffix_12_Y = 0
-    suffix_1b_X = 0
-    suffix_1b_Y = 0
-    suffix_13_X = 0
-    suffix_13_Y = 0
-
-    suffix_1c_X = 0
-    suffix_1c_Y = 0
-    suffix_20_X = 0
-    suffix_20_Y = 0
-
-    suffix_22_X = 0
-    suffix_22_Y = 0
-
-    suffix_2b_X = 0
-    suffix_2b_Y = 0
-    suffix_23_X = 0
-    suffix_23_Y = 0
-
-    suffix_2c_X = 0
-    suffix_2c_Y = 0
-    suffix_42_X = 0
-    suffix_42_Y = 0
-    suffix_4b_X = 0
-    suffix_4b_Y = 0
-    suffix_44_X = 0
-    suffix_44_Y = 0
-
-    suffix_4d_X = 0
-    suffix_4d_Y = 0
-
-    for i, row in enumerate(section3):
-        suffix_0_X += row[0]
-        suffix_10_X += row[1]
-        suffix_10_Y += row[2]
-        suffix_20_X += row[3]
-        suffix_20_Y += row[4]
-
-        if i in [0,1,2,3,11,12,13,14,15,16,17,25,26,27,28]:
-            suffix_12_X += row[1]
-            suffix_12_Y += row[2]
-            suffix_22_X += row[3]
-            suffix_22_Y += row[4]
-            suffix_42_X += row[5]
-            suffix_42_Y += row[6]
-        else:
-            suffix_12_X -= row[1]
-            suffix_12_Y -= row[2]
-            suffix_22_X -= row[3]
-            suffix_22_Y -= row[4]
-            suffix_42_X -= row[5]
-            suffix_42_Y -= row[6]
-
-        if i in [8,9,10,11,12,13,22,23,24,25,26,27]:
-            suffix_1b_X += row[1]
-            suffix_1b_Y += row[2]
-            suffix_2b_X += row[3]
-            suffix_2b_Y += row[4]
-            suffix_4b_X += row[5]
-            suffix_4b_Y += row[6]
-        
-        if i in [1,2,3,4,5,6,15,16,17,18,19,20]:
-            suffix_1b_X -= row[1]
-            suffix_1b_Y -= row[2]
-            suffix_2b_X -= row[3]
-            suffix_2b_Y -= row[4]
-            suffix_4b_X -= row[5]
-            suffix_4b_Y -= row[6]
-        
-        if i in [2,3,4,5,6,12,13,14,15,16,22,23,24,25,26]:
-            suffix_13_X += row[1]
-            suffix_13_Y += row[2]
-            suffix_23_X += row[3]
-            suffix_23_Y += row[4]
-        else:
-            suffix_13_X -= row[1]
-            suffix_13_Y -= row[2]
-            suffix_23_X -= row[3]
-            suffix_23_Y -= row[4]
-
-        if i in [0,1,2,3,4,10,11,12,13,19,20,21,22,23]:
-            suffix_1c_X += row[1]
-            suffix_1c_Y += row[2]
-            suffix_2c_X += row[3]
-            suffix_2c_Y += row[4]
-        
-        if i in [5,6,7,8,9,15,16,17,18,24,25,26,27,28]:
-            suffix_1c_X -= row[1]
-            suffix_1c_Y -= row[2]
-            suffix_2c_X -= row[3]
-            suffix_2c_Y -= row[4]
-
-        if i in [0,1,5,6,7,8,13,14,15,20,21,22,23,27,28]:
-            suffix_44_X += row[5]
-            suffix_44_Y += row[6]
-        if i in [2,3,4,9,10,11,12,16,17,18,19,24,25,26]:
-            suffix_44_X -= row[5]
-            suffix_44_Y -= row[6]
-
-        if i in [4,5,6,11,12,13,18,19,20,25,26,27]:
-            suffix_4d_X += row[5]
-            suffix_4d_Y += row[6]
-        if i in [1,2,3,8,9,10,15,16,17,22,23,24]:
-            suffix_4d_X -= row[5]
-            suffix_4d_Y -= row[6]
-
-    suffix_10_X -= 29*cx_1
-    suffix_10_Y -= 29*cy_1
-    suffix_20_X -= 29*cx_2
-    suffix_20_Y -= 29*cy_2
-
-    suffix_12_X -= 1*cx_1
-    suffix_12_Y -= 1*cy_1
-    suffix_22_X -= 1*cx_2
-    suffix_22_Y -= 1*cy_2
-    suffix_42_X -= 1*cx_4
-    suffix_42_Y -= 1*cy_4
-
-    suffix_13_X -= 1*cx_1
-    suffix_13_Y -= 1*cy_1
-    suffix_23_X -= 1*cx_2
-    suffix_23_Y -= 1*cy_2
-
-    suffix_44_X -= 1*cx_4
-    suffix_44_Y -= 1*cy_4
-
-    # section 5
-    constant5 = [suffix_0_X, suffix_10_X, suffix_12_X - suffix_1b_Y, suffix_13_X - suffix_1c_Y, suffix_20_X, suffix_22_X - suffix_2b_Y,
-                suffix_23_X - suffix_2c_Y, suffix_42_X - suffix_4b_Y, suffix_44_X - suffix_4d_Y]
-  
-
-
-    section5 = [
-        [constant5[0], 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 1*constant5[1], -0.08*constant5[1], 0, 0],
-        [0, 0.07*constant5[2], 0, 0, -0.02*constant5[2], 1*constant5[2], 0, 0.02*constant5[2]],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, -0.03*constant5[4], 1*constant5[4], -0.03*constant5[4], 0, 0, 0, 0],
-        [0, 1*constant5[5], 0.015*constant5[5], 0.038*constant5[5], 0.002*constant5[5], -0.058*constant5[5], 0, -0.035*constant5[5]],
-        [0, -0.06*constant5[6], 0, 1*constant5[6], 0, 0, 0, 0],
-        [0, 0.03*constant5[7], 0, 0, 0, 0, 0, 1*constant5[7]],
-        [0, 0, 0, 0, 0, 0, 1*constant5[8], 0.08*constant5[8]]
-    ]
-
-    # section 6
-    constant6 = [suffix_10_Y, suffix_12_Y + suffix_1b_X, suffix_13_Y + suffix_1c_X, suffix_20_Y,
-                suffix_22_Y + suffix_2b_X, suffix_23_Y + suffix_2c_X, suffix_42_Y + suffix_4b_X,
-                suffix_44_Y + suffix_4d_X]
-
-    section6 = [
-        [0, 0, 0, 0, 1.01*constant6[0], -0.08*constant6[0], 0, 0],
-        [0, 0.07*constant6[1], 0, 0, -0.02*constant6[1], 1*constant6[1], 0, 0.03*constant6[1]],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, -0.03*constant6[3], 1*constant6[3], -0.03*constant6[3], 0, 0, 0, 0],
-        [0, 1*constant6[4], 0.015*constant6[4], 0.032*constant6[4], 0, -0.057*constant6[4], 0, -0.035*constant6[4]],
-        [0, -0.06*constant6[5], 0, 1*constant6[5], 0, 0, 0, 0],
-        [0, 0.03*constant6[6], 0, 0, 0, 0, 0.01*constant6[6], 1*constant6[6]],
-        [0, 0, 0, 0, 0, 0, 1*constant6[7], 0.08*constant6[7]]
-    ]
-
     def measure_sec4(data, index, a, list_data_1, list_data_2=None):
         if a == 29:
             data_range = [data[row][index] for row in list_data_1]
@@ -250,157 +83,77 @@ def run(file_path):
             return sum(data_range)
         return None
 
-    dat_sec_4_1 = measure_sec4(section3, 0, A10, range(0,29))
-    dat_sec_4_2 = measure_sec4(section3, 1, A10, range(0,29), range(7,27))
-    dat_sec_4_3 = A10 * cx_1
-    dat_sec_4_4 = measure_sec4(section3, 1, A10, [0,1,2,3,11,12,13,14,15,16,17,25,26,27,28])
-    dat_sec_4_5 = measure_sec4(section3, 1, A10, [4,5,6,7,8,9,10,18,19,20,21,22,23,24], [0,1,2,3,11,12,13,14,15,16,17,25,26,27,28])
-    dat_sec_4_6 = cx_1
-    dat_sec_4_7 = measure_sec4(section3, 1, A10, [8,9,10,11,12,13,22,23,24,25,26,27], [8,9,10,11,12,13])
-    dat_sec_4_8 = measure_sec4(section3, 1, A10, [1,2,3,4,5,6,15,16,17,18,19,20], [15,16,17,18,19,20])
-    dat_sec_4_9 = measure_sec4(section3, 1, A15, [2,3,4,5,6,12,13,14,15,16,22,23,24,25,26], [12,13,14,15,16])
-    dat_sec_4_10 = measure_sec4(section3, 1, A15, [0,1,7,8,9,10,11,17,18,19,20,21,27,28], [7,8,9,10,11,17,18,19,20,21])
-    dat_sec_4_11 = cx_1 if A15 == 29 else cx_1 * 5
-    dat_sec_4_12 = measure_sec4(section3, 1, A15, [0,1,2,3,4,10,11,12,13,19,20,21,22,23], [10,11,12,13,19,20,21])
-    dat_sec_4_13 = measure_sec4(section3, 1, A15, [5,6,7,8,9,15,16,17,18,24,25,26,27,28], [7,8,9,15,16,17,18])
-    dat_sec_4_14 = measure_sec4(section3, 3, A22, range(0,29), range(7,27))
-    dat_sec_4_15 = A22 * cx_2
-    dat_sec_4_16 = measure_sec4(section3, 3, A22, [0,1,2,3,11,12,13,14,15,16,17,25,26,27,28], [11,12,13,14,15,16,17])
-    dat_sec_4_17 = measure_sec4(section3, 3, A22, [4,5,6,7,8,9,10,18,19,20,21,22,23,24], [7,8,9,10,18,19,20,21])
-    dat_sec_4_18 = cx_2
-    dat_sec_4_19 = measure_sec4(section3, 3, A27, [8,9,10,11,12,13,22,23,24,25,26,27],[8,9,10,11,12,13])
-    dat_sec_4_20 = measure_sec4(section3, 3, A27, [1,2,3,4,5,6,15,16,17,18,19,20],[15,16,17,18,19,20])
-    dat_sec_4_21 = measure_sec4(section3, 3, A27, [2,3,4,5,6,12,13,14,15,16,22,23,24,25,26],[12,13,14,15,16])
-    dat_sec_4_22 = measure_sec4(section3, 3, A27, [0,1,7,8,9,10,11,17,18,19,20,21,27,28],[7,8,9,10,11,17,18,19,20,21])
-    dat_sec_4_23 = cx_2 if A27 == 29 else cx_2 * 5
-    # dat_sec_4_24 = calculate_sum(A27, PASUT_AP6_to_AP10 + PASUT_AP16_to_AP19 + PASUT_AP25_to_AP29, PASUT_AP16_to_AP19 + PASUT_AP25_to_AP27)
-    # dat_sec_4_25 = calculate_sum(A27, PASUT_AP11_to_AP15 + PASUT_AP21_to_AP24 + PASUT_AP30_to_AP34, PASUT_AP13_to_AP15 + PASUT_AP21_to_AP24)
-    # dat_sec_4_26 = calculate_sum(A32, PASUT_AR6_to_AR9 + PASUT_AR17_to_AR23 + PASUT_AR31_to_AR34, PASUT_AR17_to_AR23)
-    # dat_sec_4_27 = calculate_sum(A32, PASUT_AR10_to_AR16 + PASUT_AR24_to_AR30, PASUT_AR13_to_AR16 + PASUT_AR24_to_AR27)
-    dat_sec_4_24 = measure_sec4(section3, 3, A27, [0,1,2,3,4,10,11,12,13,19,20,21,22,23],[10,11,12,13,19,20,21])
-    dat_sec_4_25 = measure_sec4(section3, 3, A27, [5,6,7,8,9,15,16,17,18,24,25,26,27,28],[7,8,9,15,16,17,18])
-    dat_sec_4_26 = measure_sec4(section3, 5, A32, [0,1,2,3,11,12,13,14,15,16,17,25,26,27,28],[11,12,13,14,15,16,17])
-    dat_sec_4_27 = measure_sec4(section3, 5, A32, [4,5,6,7,8,9,10,18,19,20,21,22,23,24],[7,8,9,10,18,19,20,21])
-    dat_sec_4_28 = cx_4
-    # dat_sec_4_29 = calculate_sum(A32, PASUT_AR14_to_AR19 + PASUT_AR28_to_AR33, PASUT_AR14_to_AR19)
-    # dat_sec_4_30 = calculate_sum(A32, PASUT_AR7_to_AR12 + PASUT_AR21_to_AR26, PASUT_AR21_to_AR26)
-    # dat_sec_4_31 = calculate_sum(A37, PASUT_AR6_to_AR7 + PASUT_AR11_to_AR14 + PASUT_AR19_to_AR21 + PASUT_AR26_to_AR29 + PASUT_AR33_to_AR34, PASUT_AR13_to_AR14 + PASUT_AR19_to_AR21 + PASUT_AR26_to_AR27)
-    # dat_sec_4_32 = calculate_sum(A37, PASUT_AR8_to_AR10 + PASUT_AR15_to_AR18 + PASUT_AR22_to_AR25 + PASUT_AR30_to_AR32, PASUT_AR15_to_AR18 + PASUT_AR22_to_AR25)
-    dat_sec_4_29 = measure_sec4(section3, 5, A32, [8,9,10,11,12,13,22,23,24,25,26,27],[8,9,10,11,12,13])
-    dat_sec_4_30 = measure_sec4(section3, 5, A32, [1,2,3,4,5,6,15,16,17,18,19,20],[15,16,17,18,19,20,21])
-    dat_sec_4_31 = measure_sec4(section3, 5, A37, [0,1,5,6,7,8,13,14,15,20,21,22,23,27,28],[8,9,13,14,15,20,21])
-    dat_sec_4_32 = measure_sec4(section3, 5, A37, [2,3,4,9,10,11,12,16,17,18,19,24,25,26],[9,10,11,12,16,17,18,29])
-    dat_sec_4_33 = cx_4
-    # dat_sec_4_34 = calculate_sum(A37, PASUT_AR10_to_AR12 + PASUT_AR17_to_AR19 + PASUT_AR24_to_AR26 + PASUT_AR31_to_AR33, PASUT_AR17_to_AR19 + PASUT_AR24_to_AR26)
-    # dat_sec_4_35 = calculate_sum(A37, PASUT_AR7_to_AR9 + PASUT_AR14_to_AR16 + PASUT_AR21_to_AR23 + PASUT_AR28_to_AR30, PASUT_AR14_to_AR16 + PASUT_AR21_to_AR23)
+    dat_sec_4x_1 = measure_sec4(section3, 0, A10, range(0,29))
+    dat_sec_4x_2 = measure_sec4(section3, 1, A10, range(0,29), range(7,27))
+    dat_sec_4x_3 = A10 * cx_1
+    dat_sec_4x_4 = measure_sec4(section3, 1, A10, [0,1,2,3,11,12,13,14,15,16,17,25,26,27,28])
+    dat_sec_4x_5 = measure_sec4(section3, 1, A10, [4,5,6,7,8,9,10,18,19,20,21,22,23,24], [0,1,2,3,11,12,13,14,15,16,17,25,26,27,28])
+    dat_sec_4x_6 = cx_1
+    dat_sec_4x_7 = measure_sec4(section3, 1, A10, [8,9,10,11,12,13,22,23,24,25,26,27], [8,9,10,11,12,13])
+    dat_sec_4x_8 = measure_sec4(section3, 1, A10, [1,2,3,4,5,6,15,16,17,18,19,20], [15,16,17,18,19,20])
+    dat_sec_4x_9 = measure_sec4(section3, 1, A15, [2,3,4,5,6,12,13,14,15,16,22,23,24,25,26], [12,13,14,15,16])
+    dat_sec_4x_10 = measure_sec4(section3, 1, A15, [0,1,7,8,9,10,11,17,18,19,20,21,27,28], [7,8,9,10,11,17,18,19,20,21])
+    dat_sec_4x_11 = cx_1 if A15 == 29 else cx_1 * 5
+    dat_sec_4x_12 = measure_sec4(section3, 1, A15, [0,1,2,3,4,10,11,12,13,19,20,21,22,23], [10,11,12,13,19,20,21])
+    dat_sec_4x_13 = measure_sec4(section3, 1, A15, [5,6,7,8,9,15,16,17,18,24,25,26,27,28], [7,8,9,15,16,17,18])
+    dat_sec_4x_14 = measure_sec4(section3, 3, A22, range(0,29), range(7,27))
+    dat_sec_4x_15 = A22 * cx_2
+    dat_sec_4x_16 = measure_sec4(section3, 3, A22, [0,1,2,3,11,12,13,14,15,16,17,25,26,27,28], [11,12,13,14,15,16,17])
+    dat_sec_4x_17 = measure_sec4(section3, 3, A22, [4,5,6,7,8,9,10,18,19,20,21,22,23,24], [7,8,9,10,18,19,20,21])
+    dat_sec_4x_18 = cx_2
+    dat_sec_4x_19 = measure_sec4(section3, 3, A27, [8,9,10,11,12,13,22,23,24,25,26,27],[8,9,10,11,12,13])
+    dat_sec_4x_20 = measure_sec4(section3, 3, A27, [1,2,3,4,5,6,15,16,17,18,19,20],[15,16,17,18,19,20])
+    dat_sec_4x_21 = measure_sec4(section3, 3, A27, [2,3,4,5,6,12,13,14,15,16,22,23,24,25,26],[12,13,14,15,16])
+    dat_sec_4x_22 = measure_sec4(section3, 3, A27, [0,1,7,8,9,10,11,17,18,19,20,21,27,28],[7,8,9,10,11,17,18,19,20,21])
+    dat_sec_4x_23 = cx_2 if A27 == 29 else cx_2 * 5
+    dat_sec_4x_24 = measure_sec4(section3, 3, A27, [0,1,2,3,4,10,11,12,13,19,20,21,22,23],[10,11,12,13,19,20,21])
+    dat_sec_4x_25 = measure_sec4(section3, 3, A27, [5,6,7,8,9,15,16,17,18,24,25,26,27,28],[7,8,9,15,16,17,18])
+    dat_sec_4x_26 = measure_sec4(section3, 5, A32, [0,1,2,3,11,12,13,14,15,16,17,25,26,27,28],[11,12,13,14,15,16,17])
+    dat_sec_4x_27 = measure_sec4(section3, 5, A32, [4,5,6,7,8,9,10,18,19,20,21,22,23,24],[7,8,9,10,18,19,20,21])
+    dat_sec_4x_28 = cx_4
+    dat_sec_4x_29 = measure_sec4(section3, 5, A32, [8,9,10,11,12,13,22,23,24,25,26,27],[8,9,10,11,12,13])
+    dat_sec_4x_30 = measure_sec4(section3, 5, A32, [1,2,3,4,5,6,15,16,17,18,19,20],[15,16,17,18,19,20,21])
+    dat_sec_4x_31 = measure_sec4(section3, 5, A37, [0,1,5,6,7,8,13,14,15,20,21,22,23,27,28],[8,9,13,14,15,20,21])
+    dat_sec_4x_32 = measure_sec4(section3, 5, A37, [2,3,4,9,10,11,12,16,17,18,19,24,25,26],[9,10,11,12,16,17,18,29])
+    dat_sec_4x_33 = cx_4
+    dat_sec_4x_34 = measure_sec4(section3, 5, A37, [4,5,6,11,12,13,18,19,20,25,26,27],[11,12,13,18,19,20])
+    dat_sec_4x_35 = measure_sec4(section3, 5, A37, [1,2,3,8,9,10,15,16,17,22,23,24],[8,9,10,15,16,17])
 
-
-    dat_sec_4_34 = measure_sec4(section3, 5, A37, [4,5,6,11,12,13,18,19,20,25,26,27],[11,12,13,18,19,20])
-    dat_sec_4_35 = measure_sec4(section3, 5, A37, [1,2,3,8,9,10,15,16,17,22,23,24],[8,9,10,15,16,17])
-
-    # dat_sec_4_1 = calculate_sum(A10, PASUT_AO6_to_AO34, PASUT_AO13_to_AO27)
-    # dat_sec_4_2 = A10 * PASUT_AO5
-    # dat_sec_4_3 = calculate_sum(A10, PASUT_AO6_to_AO9 + PASUT_AO17_to_AO23 + PASUT_AO31_to_AO34, PASUT_AO17_to_AO23)
-    # dat_sec_4_4 = calculate_sum(A10, PASUT_AO10_to_AO16 + PASUT_AO24_to_AO30, PASUT_AO13_to_AO16 + PASUT_AO24_to_AO27)
-    # dat_sec_4_5 = calculate_sum(A10, PASUT_AO14_to_AO19 + PASUT_AO28_to_AO33, PASUT_AO14_to_AO19)
-
-    dat_sec_4y_1 = measure_sec4(section3, 2, A10, range(0,29), range(7,27))
-    dat_sec_4y_2 = A10 * cy_1
-    dat_sec_4y_3 = measure_sec4(section3, 2, A10, [0,1,2,3,11,12,13,14,15,16,17,25,26,27,28],[11,12,13,14,15,16,17])
-    dat_sec_4y_4 = measure_sec4(section3, 2, A10, [4,5,6,7,8,9,10,18,19,20,21,22,23,24],[7,8,9,10,18,19,20,21])
-    dat_sec_4y_5 = measure_sec4(section3, 2, A10, [8,9,10,11,12,13,22,23,24,25,26,27],[8,9,10,11,12,13])
-
-    # Bagian pertama
-    # dat_sec_4_1 = calculate_sum(A10, PASUT_AO6_to_AO34, PASUT_AO13_to_AO27)
-    # dat_sec_4_2 = A10 * PASUT_AO5
-    # dat_sec_4_3 = calculate_sum(A10, PASUT_AO6_to_AO9 + PASUT_AO17_to_AO23 + PASUT_AO31_to_AO34, PASUT_AO17_to_AO23)
-    # dat_sec_4_4 = calculate_sum(A10, PASUT_AO10_to_AO16 + PASUT_AO24_to_AO30, PASUT_AO13_to_AO16 + PASUT_AO24_to_AO27)
-    # dat_sec_4_5 = calculate_sum(A10, PASUT_AO14_to_AO19 + PASUT_AO28_to_AO33, PASUT_AO14_to_AO19)
-
-    # # Bagian kedua
-    # dat_sec_4_6 = calculate_sum(A10, PASUT_AO7_to_AO12 + PASUT_AO21_to_AO26, PASUT_AO21_to_AO26)
-    # dat_sec_4_7 = calculate_sum(A15, PASUT_AO8_to_AO12 + PASUT_AO18_to_AO22 + PASUT_AO28_to_AO32, PASUT_AO18_to_AO22)
-    # dat_sec_4_8 = calculate_sum(A15, PASUT_AO6_to_AO7 + PASUT_AO13_to_AO17 + PASUT_AO23_to_AO27 + PASUT_AO33_to_AO34, PASUT_AO13_to_AO17 + PASUT_AO23_to_AO27)
-
-    # # Bagian ketiga
-    # dat_sec_4_9 = calculate_sum(A15, PASUT_AO6_to_AO10 + PASUT_AO16_to_AO19 + PASUT_AO25_to_AO29, PASUT_AO16_to_AO19 + PASUT_AO25_to_AO27)
-    # dat_sec_4_10 = calculate_sum(A15, PASUT_AO11_to_AO15 + PASUT_AO21_to_AO24 + PASUT_AO30_to_AO34, PASUT_AO13_to_AO15 + PASUT_AO21_to_AO24)
-
-    # # Bagian keempat
-    # dat_sec_4_11 = calculate_sum(A22, PASUT_AQ6_to_AQ34, PASUT_AQ13_to_AQ27)
-    # dat_sec_4_12 = A22 * PASUT_AQ5
-    # dat_sec_4_13 = calculate_sum(A22, PASUT_AQ6_to_AQ9 + PASUT_AQ17_to_AQ23 + PASUT_AQ31_to_AQ34, PASUT_AQ17_to_AQ23)
-    # dat_sec_4_14 = calculate_sum(A22, PASUT_AQ10_to_AQ16 + PASUT_AQ24_to_AQ30, PASUT_AQ13_to_AQ16 + PASUT_AQ24_to_AQ27)
-    # dat_sec_4_15 = calculate_sum(A22, PASUT_AQ14_to_AQ19 + PASUT_AQ28_to_AQ33, PASUT_AQ14_to_AQ19)
-
-    # # Bagian kelima
-    # dat_sec_4_16 = calculate_sum(A27, PASUT_AQ7_to_AQ12 + PASUT_AQ21_to_AQ26, PASUT_AQ21_to_AQ26)
-    # dat_sec_4_17 = calculate_sum(A27, PASUT_AQ8_to_AQ12 + PASUT_AQ18_to_AQ22 + PASUT_AQ28_to_AQ32, PASUT_AQ18_to_AQ22)
-    # dat_sec_4_18 = calculate_sum(A27, PASUT_AQ6_to_AQ7 + PASUT_AQ13_to_AQ17 + PASUT_AQ23_to_AQ27 + PASUT_AQ33_to_AQ34, PASUT_AQ13_to_AQ17 + PASUT_AQ23_to_AQ27)
-
-    # # Bagian keenam
-    # dat_sec_4_19 = calculate_sum(A27, PASUT_AQ6_to_AQ10 + PASUT_AQ16_to_AQ19 + PASUT_AQ25_to_AQ29, PASUT_AQ16_to_AQ19 + PASUT_AQ25_to_AQ27)
-    # dat_sec_4_20 = calculate_sum(A27, PASUT_AQ11_to_AQ15 + PASUT_AQ21_to_AQ24 + PASUT_AQ30_to_AQ34, PASUT_AQ13_to_AQ15 + PASUT_AQ21_to_AQ24)
-
-    # # Bagian ketujuh
-    # dat_sec_4_21 = calculate_sum(A32, PASUT_AS6_to_AS9 + PASUT_AS17_to_AS23 + PASUT_AS31_to_AS34, PASUT_AS17_to_AS23)
-    # dat_sec_4_22 = calculate_sum(A32, PASUT_AS10_to_AS16 + PASUT_AS24_to_AS30, PASUT_AS13_to_AS16 + PASUT_AS24_to_AS27)
-    # dat_sec_4_23 = A32 * PASUT_AS5
-
-    # Bagian kedelapan
-    # dat_sec_4_24 = calculate_sum(A32, PASUT_AS14_to_AS19 + PASUT_AS28_to_AS33, PASUT_AS14_to_AS19)
-    # dat_sec_4_25 = calculate_sum(A32, PASUT_AS7_to_AS12 + PASUT_AS21_to_AS26, PASUT_AS21_to_AS26)
-    # dat_sec_4_26 = calculate_sum(A37, PASUT_AS6_to_AS7 + PASUT_AS11_to_AS14 + PASUT_AS19_to_AS21 + PASUT_AS26_to_AS29 + PASUT_AS33_to_AS34, PASUT_AS13_to_AS14 + PASUT_AS19_to_AS21 + PASUT_AS26_to_AS27)
-    # dat_sec_4_27 = calculate_sum(A37, PASUT_AS8_to_AS10 + PASUT_AS15_to_AS18 + PASUT_AS22_to_AS25 + PASUT_AS30_to_AS32, PASUT_AS15_to_AS18 + PASUT_AS22_to_AS25)
-    # dat_sec_4_28 = A37 * PASUT_AS5
-    # dat_sec_4_29 = calculate_sum(A37, PASUT_AS10_to_AS12 + PASUT_AS17_to_AS19 + PASUT_AS24_to_AS26 + PASUT_AS31_to_AS33, PASUT_AS17_to_AS19 + PASUT_AS24_to_AS26)
-    # dat_sec_4_30 = calculate_sum(A37, PASUT_AS7_to_AS9 + PASUT_AS14_to_AS16 + PASUT_AS21_to_AS23 + PASUT_AS28_to_AS30, PASUT_AS14_to_AS16 + PASUT_AS21_to_AS23)
-
-    # # Bagian kesembilan
-    # dat_sec_4_31 = calculate_sum(A37, PASUT_AS6_to_AS9 + PASUT_AS14_to_AS18 + PASUT_AS22_to_AS26 + PASUT_AS30_to_AS34, PASUT_AS14_to_AS18 + PASUT_AS22_to_AS26)
-    # dat_sec_4_32 = calculate_sum(A37, PASUT_AS7_to_AS12 + PASUT_AS15_to_AS19 + PASUT_AS23_to_AS27 + PASUT_AS31_to_AS34, PASUT_AS15_to_AS19 + PASUT_AS23_to_AS27)
-    # dat_sec_4_33 = calculate_sum(A37, PASUT_AS8_to_AS11 + PASUT_AS16_to_AS20 + PASUT_AS24_to_AS28 + PASUT_AS32_to_AS34, PASUT_AS16_to_AS20 + PASUT_AS24_to_AS28)
-    # dat_sec_4_34 = calculate_sum(A37, PASUT_AS6_to_AS8 + PASUT_AS13_to_AS17 + PASUT_AS22_to_AS26 + PASUT_AS30_to_AS34, PASUT_AS13_to_AS17 + PASUT_AS22_to_AS26)
-    # dat_sec_4_35 = calculate_sum(A37, PASUT_AS6_to_AS9 + PASUT_AS14_to_AS19 + PASUT_AS23_to_AS28 + PASUT_AS31_to_AS34, PASUT_AS14_to_AS19 + PASUT_AS23_to_AS28)
-
-
-
-    # dat_sec_2_1 = calculate_sum(A10, PASUT_AO6_to_AO34, PASUT_AO13_to_AO27)
-    # dat_sec_2_2 = A10 * PASUT_AO5
-    # dat_sec_2_3 = calculate_sum(A10, PASUT_AO6_to_AO9, PASUT_AO17_to_AO23, PASUT_AO31_to_AO34)
-    # dat_sec_2_4 = calculate_sum(A10, PASUT_AO10_to_AO16, PASUT_AO24_to_AO30, PASUT_AO13_to_AO16, PASUT_AO24_to_AO27)
-    # dat_sec_2_5 = PASUT_AO5
-    # dat_sec_2_6 = calculate_sum(A10, PASUT_AO14_to_AO19, PASUT_AO28_to_AO33, PASUT_AO14_to_AO19)
-    # dat_sec_2_7 = calculate_sum(A10, PASUT_AO7_to_AO12, PASUT_AO21_to_AO26, PASUT_AO21_to_AO26)
-    # dat_sec_2_8 = calculate_sum(A15, PASUT_AO8_to_AO12, PASUT_AO18_to_AO22, PASUT_AO28_to_AO32)
-    # dat_sec_2_9 = calculate_sum(A15, PASUT_AO6_to_AO7, PASUT_AO13_to_AO17, PASUT_AO23_to_AO27, PASUT_AO33_to_AO34)
-    # dat_sec_2_10 = A15 * PASUT_AO5 * 5
-    # dat_sec_2_11 = calculate_sum(A15, PASUT_AO6_to_AO10, PASUT_AO16_to_AO19, PASUT_AO25_to_AO29, PASUT_AO16_to_AO19, PASUT_AO25_to_AO27)
-    # dat_sec_2_12 = calculate_sum(A15, PASUT_AO11_to_AO15, PASUT_AO21_to_AO24, PASUT_AO30_to_AO34, PASUT_AO13_to_AO15, PASUT_AO21_to_AO24)
-    # dat_sec_2_13 = calculate_sum(A22, PASUT_AQ6_to_AQ34, PASUT_AQ13_to_AQ27)
-    # dat_sec_2_14 = A22 * PASUT_AQ5
-    # dat_sec_2_15 = calculate_sum(A22, PASUT_AQ6_to_AQ9, PASUT_AQ17_to_AQ23, PASUT_AQ31_to_AQ34)
-    # dat_sec_2_16 = calculate_sum(A22, PASUT_AQ10_to_AQ16, PASUT_AQ24_to_AQ30, PASUT_AQ13_to_AQ16, PASUT_AQ24_to_AQ27)
-    # dat_sec_2_17 = PASUT_AQ5
-    # dat_sec_2_18 = calculate_sum(A27, PASUT_AQ14_to_AQ19, PASUT_AQ28_to_AQ33, PASUT_AQ14_to_AQ19)
-    # dat_sec_2_19 = calculate_sum(A27, PASUT_AQ7_to_AQ12, PASUT_AQ21_to_AQ26, PASUT_AQ21_to_AQ26)
-    # dat_sec_2_20 = calculate_sum(A27, PASUT_AQ8_to_AQ12, PASUT_AQ18_to_AQ22, PASUT_AQ28_to_AQ32)
-    # dat_sec_2_21 = calculate_sum(A27, PASUT_AQ6_to_AQ7, PASUT_AQ13_to_AQ17, PASUT_AQ23_to_AQ27, PASUT_AQ33_to_AQ34)
-    # dat_sec_2_22 = A27 * PASUT_AQ5 * 5
-    # dat_sec_2_23 = calculate_sum(A27, PASUT_AQ6_to_AQ10, PASUT_AQ16_to_AQ19, PASUT_AQ25_to_AQ29, PASUT_AQ16_to_AQ19, PASUT_AQ25_to_AQ27)
-    # dat_sec_2_24 = calculate_sum(A27, PASUT_AQ11_to_AQ15, PASUT_AQ21_to_AQ24, PASUT_AQ30_to_AQ34, PASUT_AQ13_to_AQ15, PASUT_AQ21_to_AQ24)
-    # dat_sec_2_25 = calculate_sum(A32, PASUT_AS6_to_AS9, PASUT_AS17_to_AS23, PASUT_AS31_to_AS34)
-    # dat_sec_2_26 = calculate_sum(A32, PASUT_AS10_to_AS16, PASUT_AS24_to_AS30, PASUT_AS13_to_AS16, PASUT_AS24_to_AS27)
-    # dat_sec_2_27 = PASUT_AS5
-    # dat_sec_2_28 = calculate_sum(A32, PASUT_AS14_to_AS19, PASUT_AS28_to_AS33, PASUT_AS14_to_AS19)
-    # dat_sec_2_29 = calculate_sum(A32, PASUT_AS7_to_AS12, PASUT_AS21_to_AS26, PASUT_AS21_to_AS26)
-    # dat_sec_2_30 = calculate_sum(A37, PASUT_AS6_to_AS7, PASUT_AS11_to_AS14, PASUT_AS19_to_AS21, PASUT_AS26_to_AS29, PASUT_AS33_to_AS34)
-    # dat_sec_2_31 = calculate_sum(A37, PASUT_AS8_to_AS10, PASUT_AS15_to_AS18, PASUT_AS22_to_AS25, PASUT_AS30_to_AS32)
-    # dat_sec_2_32 = PASUT_AS5
-    # dat_sec_2_33 = calculate_sum(A37, PASUT_AS10_to_AS12, PASUT_AS17_to_AS19, PASUT_AS24_to_AS26, PASUT_AS31_to_AS33)
-    # dat_sec_2_34 = calculate_sum(A37, PASUT_AS7_to_AS9, PASUT_AS14_to_AS16, PASUT_AS21_to_AS23, PASUT_AS28_to_AS30)
-
-
+    dat_sec_4y_1 = 0
+    dat_sec_4y_2 = measure_sec4(section3, 2, A10, range(0,29), range(7,21))
+    dat_sec_4y_3 = A10 * cy_1
+    dat_sec_4y_4 = measure_sec4(section3, 2, A10, [0,1,2,3,11,12,13,14,15,16,17,25,26,27,28],[11,12,13,14,15,16,17])
+    dat_sec_4y_5 = measure_sec4(section3, 2, A10, [4,5,6,7,8,9,10,18,19,20,21,22,23,24],[7,8,9,10,18,19,20,21])
+    dat_sec_4y_6 = cy_1
+    dat_sec_4y_7 = measure_sec4(section3, 2, A10, [8,9,10,11,12,13,22,23,24,25,26,27], [8,9,10,11,12,13])
+    dat_sec_4y_8 = measure_sec4(section3, 2, A10, [1,2,3,4,5,6,15,16,17,18,19,20], [15,16,17,18,19,20])
+    dat_sec_4y_9 = measure_sec4(section3, 2, A15, [2,3,4,5,6,12,13,14,15,16,22,23,24,25,26], [12,13,14,15,16])
+    dat_sec_4y_10 = measure_sec4(section3, 2, A15, [0,1,7,8,9,10,11,17,18,19,20,21,27,28], [7,8,9,10,11,17,18,19,20,21])
+    dat_sec_4y_11 = cy_1 if A15 == 29 else cy_1 * 5
+    dat_sec_4y_12 = measure_sec4(section3, 2, A15, [0,1,2,3,4,10,11,12,13,19,20,21,22,23], [10,11,12,13,19,20,21])
+    dat_sec_4y_13 = measure_sec4(section3, 2, A15, [5,6,7,8,9,15,16,17,18,24,25,26,27,28], [7,8,9,15,16,17,18])
+    dat_sec_4y_14 = measure_sec4(section3, 4, A22, range(0,29), range(7,27))
+    dat_sec_4y_15 = A22 * cy_2
+    dat_sec_4y_16 = measure_sec4(section3, 4, A22, [0,1,2,3,11,12,13,14,15,16,17,25,26,27,28], [11,12,13,14,15,16,17])
+    dat_sec_4y_17 = measure_sec4(section3, 4, A22, [4,5,6,7,8,9,10,18,19,20,21,22,23,24], [7,8,9,10,18,19,20,21])
+    dat_sec_4y_18 = cy_2
+    dat_sec_4y_19 = measure_sec4(section3, 4, A27, [8,9,10,11,12,13,22,23,24,25,26,27],[8,9,10,11,12,13])
+    dat_sec_4y_20 = measure_sec4(section3, 4, A27, [1,2,3,4,5,6,15,16,17,18,19,20],[15,16,17,18,19,20])
+    dat_sec_4y_21 = measure_sec4(section3, 4, A27, [2,3,4,5,6,12,13,14,15,16,22,23,24,25,26],[12,13,14,15,16])
+    dat_sec_4y_22 = measure_sec4(section3, 4, A27, [0,1,7,8,9,10,11,17,18,19,20,21,27,28],[7,8,9,10,11,17,18,19,20,21])
+    dat_sec_4y_23 = cy_2 if A27 == 29 else cy_2 * 5
+    dat_sec_4y_24 = measure_sec4(section3, 4, A27, [0,1,2,3,4,10,11,12,13,19,20,21,22,23],[10,11,12,13,19,20,21])
+    dat_sec_4y_25 = measure_sec4(section3, 4, A27, [5,6,7,8,9,15,16,17,18,24,25,26,27,28],[7,8,9,15,16,17,18])
+    dat_sec_4y_26 = measure_sec4(section3, 6, A32, [0,1,2,3,11,12,13,14,15,16,17,25,26,27,28],[11,12,13,14,15,16,17])
+    dat_sec_4y_27 = measure_sec4(section3, 6, A32, [4,5,6,7,8,9,10,18,19,20,21,22,23,24],[7,8,9,10,18,19,20,21])
+    dat_sec_4y_28 = cy_4
+    dat_sec_4y_29 = measure_sec4(section3, 6, A32, [8,9,10,11,12,13,22,23,24,25,26,27],[8,9,10,11,12,13])
+    dat_sec_4y_30 = measure_sec4(section3, 6, A32, [1,2,3,4,5,6,15,16,17,18,19,20],[15,16,17,18,19,20,21])
+    dat_sec_4y_31 = measure_sec4(section3, 6, A37, [0,1,5,6,7,8,13,14,15,20,21,22,23,27,28],[8,9,13,14,15,20,21])
+    dat_sec_4y_32 = measure_sec4(section3, 6, A37, [2,3,4,9,10,11,12,16,17,18,19,24,25,26],[9,10,11,12,16,17,18,29])
+    dat_sec_4y_33 = cy_4
+    dat_sec_4y_34 = measure_sec4(section3, 6, A37, [4,5,6,11,12,13,18,19,20,25,26,27],[11,12,13,18,19,20])
+    dat_sec_4y_35 = measure_sec4(section3, 6, A37, [1,2,3,8,9,10,15,16,17,22,23,24],[8,9,10,15,16,17])
 
     # section_3 = [
     #     ["00", "+", 100967.0548, None, 100967.0548, None],
@@ -441,45 +194,45 @@ def run(file_path):
     # ]
 
     section_3 = [
-        ["00", "+", dat_sec_4_1, None, 100967.0548, None],
-        ["10", "+", dat_sec_4_2, dat_sec_4y_1, -959.3270898, None],
-        [None, "-", dat_sec_4_3, dat_sec_4y_2, None, 9498.804693],
-        ["12", "+", dat_sec_4_4, dat_sec_4y_3, None, 3594.484792],
-        [None, "-", dat_sec_4_5, dat_sec_4y_4, 1335.151419, None],
-        ["29", "(-)  (+)", dat_sec_4_6, 2000, None, None],
-        ["1b", "+", dat_sec_4_7, 26595.07553, 3898.173086, -2539.649243],
-        [None, "-", dat_sec_4_8, 29134.72477, None, None],
-        ["13", "+", dat_sec_4_9, 35248.7482, None, 998.6916995],
-        [None, "-", dat_sec_4_10, 32250.0565, 1054.00035, None],
-        ["29", "(-)  (+)", dat_sec_4_11, 2000, None, None],
-        ["1c", "+", dat_sec_4_12, 32092.19264, -171.4695604, -788.6917405],
-        [None, "-", dat_sec_4_13, 32880.88438, None, None],
-        ["20", "+", dat_sec_4_14, 53268.5847, 11665.062, None],
-        [None, "-", dat_sec_4_15, 58000, None, -4731.415296],
-        ["22", "+", dat_sec_4_16, 29089.64042, -8217.493126, 2910.696129],
-        [None, "-", dat_sec_4_17, 24178.94429, None, None],
-        ["29", "(-)  (+)", dat_sec_4_18, 2000, None, None],
-        ["2b", "+", dat_sec_4_19, 26485.67715, 3214.905949, None],
-        [None, "-", dat_sec_4_20, 17504.7914, None, 8980.885749],
-        ["23", "+", dat_sec_4_21, 28469.01076, None, 1669.436813],
-        [None, "-", dat_sec_4_22, 24799.57395, -831.5774784, None],
-        ["29", "(-)  (+)", dat_sec_4_23, 2000, None, None],
-        ["2c", "+", dat_sec_4_24, 25305.13092, 1096.311023, -535.7400476],
-        [None, "-", dat_sec_4_25, 25840.87097, None, None],
-        ["42", "+", dat_sec_4_26, 7557.612331, -264.643106, None],
-        [None, "-", dat_sec_4_27, 6985.676678, None, 71.93565312],
-        ["29", "(-)  (+)", dat_sec_4_28, 500, None, None],
-        ["4b", "+", dat_sec_4_29, 6363.643023, None, None],
-        [None, "-", dat_sec_4_30, 5667.918853, 46.62120616, 695.7241696],
-        ["44", "+", dat_sec_4_31, 7549.966083, None, 56.64315705],
-        [None, "-", dat_sec_4_32, 6993.322926, 126.3669747, None],
-        ["29", "(-)  (+)", dat_sec_4_33, 500, None, None],
-        ["4d", "+", dat_sec_4_34, 5981.370501, 13.23218204, None],
-        [None, "-", dat_sec_4_35, 6050.191375, None, -68.82087351]
+        ["00", "+", dat_sec_4x_1, None, dat_sec_4x_1, None],
+        ["10", "+", dat_sec_4x_2, dat_sec_4y_2, (dat_sec_4x_2 - dat_sec_4x_3) if A10 == 29 else 0, None],
+        [None, "-", dat_sec_4x_3, dat_sec_4y_3, None, dat_sec_4y_2 - dat_sec_4y_3],
+        ["12", "+", dat_sec_4x_4, dat_sec_4y_4, None, (dat_sec_4y_4 - dat_sec_4y_5 - dat_sec_4y_6) if A10 == 29 else 0],
+        [None, "-", dat_sec_4x_5, dat_sec_4y_5, (dat_sec_4x_4 - dat_sec_4x_5 - dat_sec_4x_6) if A10 == 29 else 0, None],
+        ["29", "(-)  (+)", dat_sec_4x_6, dat_sec_4y_6, None, None],
+        ["1b", "+", dat_sec_4x_7, dat_sec_4y_7, (dat_sec_4x_7 - dat_sec_4x_8) if A10 == 29 else 0, (dat_sec_4y_7 - dat_sec_4y_8) if A10 == 29 else 0],
+        [None, "-", dat_sec_4x_8, dat_sec_4y_8, None, None],
+        ["13", "+", dat_sec_4x_9, dat_sec_4y_9, None, (dat_sec_4y_9 - dat_sec_4y_10 - dat_sec_4y_11) if A15 == 29 else 0],
+        [None, "-", dat_sec_4x_10, dat_sec_4y_10, (dat_sec_4x_9 - dat_sec_4x_10 - dat_sec_4x_11) if A15 == 29 else 0, None],
+        ["29", "(-)  (+)", dat_sec_4x_11, dat_sec_4y_11, None, None],
+        ["1c", "+", dat_sec_4x_12, dat_sec_4y_12, (dat_sec_4x_12 - dat_sec_4x_13) if A15 == 29 else 0, (dat_sec_4y_12 - dat_sec_4y_13) if A15 == 29 else 0],
+        [None, "-", dat_sec_4x_13, dat_sec_4y_13, None, None],
+        ["20", "+", dat_sec_4x_14, dat_sec_4y_14, dat_sec_4x_14-dat_sec_4x_15, None],
+        [None, "-", dat_sec_4x_15, dat_sec_4y_15, None, (dat_sec_4y_14 - dat_sec_4x_15) if A22 == 29 else 0],
+        ["22", "+", dat_sec_4x_16, dat_sec_4y_16, (dat_sec_4x_16-dat_sec_4x_17-dat_sec_4x_18) if A22 == 29 else 0, (dat_sec_4y_16-dat_sec_4y_17-dat_sec_4y_18) if A22 == 29 else 0],
+        [None, "-", dat_sec_4x_17, dat_sec_4y_17, None, None],
+        ["29", "(-)  (+)", dat_sec_4x_18, dat_sec_4y_18, None, None],
+        ["2b", "+", dat_sec_4x_19, dat_sec_4y_19, (dat_sec_4x_19-dat_sec_4x_20) if A27 == 29 else 0, None],
+        [None, "-", dat_sec_4x_20, dat_sec_4y_20, None, (dat_sec_4y_19-dat_sec_4y_20) if A27 == 29 else 0],
+        ["23", "+", dat_sec_4x_21, dat_sec_4y_21, None, (dat_sec_4y_21-dat_sec_4y_22-dat_sec_4y_23) if A27 == 29 else 0],
+        [None, "-", dat_sec_4x_22, dat_sec_4y_22, (dat_sec_4x_21-dat_sec_4x_22-dat_sec_4x_23) if A27 == 29 else (dat_sec_4x_21-dat_sec_4x_22+dat_sec_4x_23), None],
+        ["29", "(-)  (+)", dat_sec_4x_23, dat_sec_4y_23, None, None],
+        ["2c", "+", dat_sec_4x_24, dat_sec_4y_24, (dat_sec_4x_24-dat_sec_4x_25) if A27 == 29 else 0, dat_sec_4y_24-dat_sec_4y_25],
+        [None, "-", dat_sec_4x_25, dat_sec_4y_25, None, None],
+        ["42", "+", dat_sec_4x_26, dat_sec_4y_26, (dat_sec_4x_26-dat_sec_4x_27-dat_sec_4x_28) if A32 == 29 else 0, None],
+        [None, "-", dat_sec_4x_27, dat_sec_4y_27, None, (dat_sec_4y_26-dat_sec_4y_27-dat_sec_4y_28) if A32 == 29 else (dat_sec_4y_26-dat_sec_4y_27+dat_sec_4y_28)],
+        ["29", "(-)  (+)", dat_sec_4x_28, dat_sec_4y_28, None, None],
+        ["4b", "+", dat_sec_4x_29, dat_sec_4y_29, None, None],
+        [None, "-", dat_sec_4x_30, dat_sec_4y_30, (dat_sec_4x_29-dat_sec_4x_30) if A32 == 29 else 0, (dat_sec_4y_29-dat_sec_4y_30) if A32 == 29 else 0],
+        ["44", "+", dat_sec_4x_31, dat_sec_4y_31, None, (dat_sec_4y_31-dat_sec_4y_32-dat_sec_4y_33) if A37 == 29 else 0],
+        [None, "-", dat_sec_4x_32, dat_sec_4y_32, (dat_sec_4x_31-dat_sec_4x_32-dat_sec_4x_33) if A37 == 29 else 0, None],
+        ["29", "(-)  (+)", dat_sec_4x_33, dat_sec_4y_33, None, None],
+        ["4d", "+", dat_sec_4x_34, dat_sec_4y_34, dat_sec_4x_34-dat_sec_4x_35, None],
+        [None, "-", dat_sec_4x_35, dat_sec_4y_35, None, dat_sec_4y_34-dat_sec_4y_35]
     ]
 
-    for row in section_3:
-        print(row)
+    # for row in section_3:
+    #     print(row)
 
     table_V_VI = [
         section_3[0][4],
@@ -500,8 +253,6 @@ def run(file_path):
         (section_3[26][5] + section_3[29][4]) if A32 == 29 else (section_3[26][5] + section_3[28][4] if A32 == 15 else None),
         (section_3[30][5] + section_3[33][4]) if A37 == 29 else (section_3[31][5] + section_3[33][4] if A37 == 15 else None)
     ]
-
-    print(table_V_VI)
 
     result1 = table_V_VI[2] * 0.07 if A10 == 29 else (table_V_VI[2] * 0.09 if A10 == 15 else 0)
     result2 = table_V_VI[2] * -0.02 if A10 == 29 else (table_V_VI[2] * -0.09 if A10 == 15 else 0)
